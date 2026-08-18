@@ -1,0 +1,1792 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A live-verified map of the companies, products, and economics across the AI-datacenter optical path."
+    />
+    <title>AI Optics Ecosystem — Follow the Photon, Follow the Revenue</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #06101c;
+        --bg-elevated: #0b1727;
+        --surface: #101f32;
+        --surface-strong: #172a40;
+        --text: #f2f6fb;
+        --muted: #b9c6d6;
+        --subtle: #91a3b8;
+        --line: #3e536b;
+        --line-strong: #68809a;
+        --cyan: #67dbff;
+        --cyan-soft: #153d52;
+        --green: #90e7aa;
+        --green-soft: #173b2d;
+        --violet: #c5b1ff;
+        --violet-soft: #322b53;
+        --amber: #ffd078;
+        --amber-soft: #48381b;
+        --rose: #ffadd3;
+        --rose-soft: #47263a;
+        --danger: #ffb4ab;
+        --focus-ring: #ffd078;
+        --selected-ring: #67dbff;
+        --dimmed-surface: #172536;
+        --dimmed-text: #d3dce8;
+        --dimmed-border: #91a3b8;
+        --radius: 14px;
+        --shadow: 0 18px 60px rgba(0, 0, 0, 0.24);
+        --max: 1240px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        overflow-x: hidden;
+        background:
+          radial-gradient(circle at 20% 0%, rgba(29, 93, 125, 0.24), transparent 34rem),
+          radial-gradient(circle at 90% 18%, rgba(72, 48, 122, 0.22), transparent 28rem),
+          var(--bg);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        font-size: 16px;
+        line-height: 1.62;
+      }
+
+      a {
+        color: var(--cyan);
+        text-underline-offset: 0.2em;
+      }
+
+      a:hover {
+        color: #a8ebff;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      button:focus-visible,
+      a:focus-visible,
+      [tabindex]:focus-visible {
+        outline: 3px solid var(--focus-ring);
+        outline-offset: 4px;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: 1rem;
+        top: -5rem;
+        z-index: 100;
+        padding: 0.7rem 1rem;
+        border-radius: 0 0 0.6rem 0.6rem;
+        background: var(--text);
+        color: var(--bg);
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
+
+      .page-shell {
+        width: min(calc(100% - 2rem), var(--max));
+        margin-inline: auto;
+      }
+
+      .hero {
+        position: relative;
+        min-height: 520px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(103, 219, 255, 0.22);
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.38;
+        background-image:
+          linear-gradient(rgba(103, 219, 255, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(103, 219, 255, 0.1) 1px, transparent 1px);
+        background-size: 44px 44px;
+        mask-image: linear-gradient(to bottom, black, transparent 92%);
+      }
+
+      .hero-inner {
+        position: relative;
+        padding: 7rem 0 5rem;
+      }
+
+      .eyebrow,
+      .kicker,
+      .ticker,
+      .claim-label,
+      .meta-label,
+      .layer-tag {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow,
+      .kicker {
+        margin: 0 0 0.75rem;
+        color: var(--cyan);
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin-top: 0;
+        line-height: 1.12;
+        letter-spacing: -0.025em;
+        font-weight: 500;
+      }
+
+      h1 {
+        max-width: 900px;
+        margin-bottom: 1.4rem;
+        font-size: clamp(2.7rem, 7vw, 6.4rem);
+      }
+
+      h1 span {
+        color: var(--cyan);
+      }
+
+      h2 {
+        margin-bottom: 0.8rem;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+      }
+
+      h3 {
+        font-size: clamp(1.25rem, 2vw, 1.65rem);
+      }
+
+      h4 {
+        margin-bottom: 0.35rem;
+        font-size: 1rem;
+      }
+
+      p {
+        margin-top: 0;
+      }
+
+      .hero-deck {
+        max-width: 760px;
+        margin-bottom: 1.5rem;
+        color: var(--muted);
+        font-size: clamp(1.06rem, 2vw, 1.28rem);
+      }
+
+      .cutoff {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 0.45rem 0.8rem;
+        align-items: center;
+        margin: 0;
+        padding: 0.55rem 0.8rem;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        background: rgba(9, 24, 40, 0.8);
+        color: var(--text);
+        font-size: 0.86rem;
+      }
+
+      .cutoff::before {
+        content: "";
+        width: 0.58rem;
+        height: 0.58rem;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 0 5px rgba(144, 231, 170, 0.12);
+      }
+
+      main {
+        padding-bottom: 5rem;
+      }
+
+      section {
+        padding: 5.4rem 0;
+        scroll-margin-top: 1.5rem;
+      }
+
+      section + section {
+        border-top: 1px solid rgba(104, 128, 154, 0.22);
+      }
+
+      .section-heading {
+        display: grid;
+        grid-template-columns: minmax(0, 0.75fr) minmax(280px, 0.35fr);
+        gap: 2rem;
+        align-items: end;
+        margin-bottom: 2.3rem;
+      }
+
+      .section-heading p:last-child {
+        margin-bottom: 0;
+        color: var(--muted);
+      }
+
+      .legend {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(120px, 1fr));
+        gap: 0.65rem;
+        margin: 2rem 0 1.4rem;
+        padding: 0;
+        list-style: none;
+      }
+
+      .legend li {
+        min-width: 0;
+        padding-top: 0.65rem;
+        border-top: 3px solid var(--layer-color, var(--line));
+        color: var(--muted);
+        font-size: 0.76rem;
+      }
+
+      .legend strong {
+        display: block;
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      .layer-fabrication {
+        --layer-color: var(--amber);
+        --layer-soft: var(--amber-soft);
+      }
+
+      .layer-components,
+      .layer-modules {
+        --layer-color: var(--green);
+        --layer-soft: var(--green-soft);
+      }
+
+      .layer-fiber {
+        --layer-color: var(--rose);
+        --layer-soft: var(--rose-soft);
+      }
+
+      .layer-networking,
+      .layer-transport {
+        --layer-color: var(--violet);
+        --layer-soft: var(--violet-soft);
+      }
+
+      .layer-test {
+        --layer-color: var(--cyan);
+        --layer-soft: var(--cyan-soft);
+      }
+
+      .taxonomy-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1.4rem;
+      }
+
+      .taxonomy {
+        padding: 1.15rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(13, 28, 46, 0.76);
+      }
+
+      .taxonomy h3 {
+        margin-bottom: 0.85rem;
+      }
+
+      .taxonomy dl {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 0.55rem 0.85rem;
+        margin: 0;
+      }
+
+      .taxonomy dt {
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      .taxonomy dd {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .map-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        margin: 0 0 1.2rem;
+      }
+
+      .filter-button,
+      .company-node,
+      .overview-button {
+        border: 1px solid var(--line-strong);
+        color: var(--text);
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .filter-button {
+        padding: 0.58rem 0.78rem;
+        border-radius: 999px;
+        background: transparent;
+        font-size: 0.82rem;
+      }
+
+      .filter-button:hover,
+      .filter-button[aria-pressed="true"] {
+        border-color: var(--cyan);
+        background: var(--cyan-soft);
+      }
+
+      .map-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.65fr);
+        gap: 1rem;
+        align-items: stretch;
+      }
+
+      .constellation-stage {
+        position: relative;
+        min-height: 680px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 4px);
+        background:
+          radial-gradient(circle at 50% 50%, rgba(103, 219, 255, 0.13), transparent 25%),
+          linear-gradient(145deg, rgba(17, 36, 58, 0.94), rgba(5, 15, 27, 0.96));
+        box-shadow: var(--shadow);
+      }
+
+      .constellation-stage::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image: radial-gradient(rgba(185, 198, 214, 0.17) 1px, transparent 1px);
+        background-size: 22px 22px;
+        mask-image: radial-gradient(circle, black 0 45%, transparent 86%);
+      }
+
+      .ecosystem-diagram {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .ecosystem-diagram .orbit {
+        fill: none;
+        stroke: #40566f;
+        stroke-width: 1.2;
+        stroke-dasharray: 4 10;
+      }
+
+      .ecosystem-diagram .signal-line {
+        fill: none;
+        stroke: #7890aa;
+        stroke-width: 1.6;
+        opacity: 0.7;
+        transition: opacity 160ms ease, stroke 160ms ease, stroke-width 160ms ease;
+      }
+
+      .ecosystem-diagram .signal-line.is-active {
+        stroke: var(--cyan);
+        stroke-width: 3;
+        opacity: 1;
+      }
+
+      .ecosystem-core {
+        position: absolute;
+        z-index: 3;
+        left: 50%;
+        top: 50%;
+        width: min(31%, 190px);
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        transform: translate(-50%, -50%);
+        border: 1px solid var(--cyan);
+        border-radius: 50%;
+        background: #102a3c;
+        box-shadow:
+          0 0 0 10px rgba(103, 219, 255, 0.07),
+          0 0 70px rgba(103, 219, 255, 0.18);
+        text-align: center;
+      }
+
+      .ecosystem-core strong,
+      .ecosystem-core span {
+        display: block;
+      }
+
+      .ecosystem-core strong {
+        font-size: 1.08rem;
+      }
+
+      .ecosystem-core span {
+        color: var(--muted);
+        font-size: 0.74rem;
+      }
+
+      .company-node {
+        position: absolute;
+        z-index: 4;
+        left: var(--x);
+        top: var(--y);
+        min-width: 104px;
+        padding: 0.7rem 0.78rem;
+        transform: translate(-50%, -50%);
+        border-color: var(--layer-color);
+        border-radius: 12px;
+        background: var(--layer-soft);
+        box-shadow: 0 7px 24px rgba(0, 0, 0, 0.28);
+        text-align: left;
+        transition: transform 160ms ease, background-color 160ms ease;
+      }
+
+      .company-node:hover {
+        transform: translate(-50%, -50%) scale(1.04);
+      }
+
+      .company-node[aria-pressed="true"] {
+        border-width: 3px;
+        border-color: var(--selected-ring);
+        box-shadow: 0 0 0 4px rgba(103, 219, 255, 0.18);
+      }
+
+      .company-node.is-dimmed {
+        border-color: var(--dimmed-border);
+        border-style: dashed;
+        background: var(--dimmed-surface);
+        color: var(--dimmed-text);
+        box-shadow: none;
+      }
+
+      .company-node.is-dimmed .ticker,
+      .company-node.is-dimmed .node-role {
+        color: var(--dimmed-text);
+      }
+
+      .company-node .node-name,
+      .company-node .node-role {
+        display: block;
+      }
+
+      .company-node .node-name {
+        font-weight: 500;
+      }
+
+      .company-node .node-role {
+        margin-top: 0.08rem;
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+
+      .ticker {
+        color: var(--layer-color, var(--cyan));
+        font-size: 0.75rem;
+      }
+
+      .selection-panel {
+        min-height: 680px;
+        padding: 1.35rem;
+        border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 4px);
+        background: rgba(13, 28, 46, 0.94);
+      }
+
+      .selection-panel > article {
+        height: 100%;
+      }
+
+      .selection-panel h3 {
+        margin-bottom: 0.6rem;
+        font-size: 1.6rem;
+      }
+
+      .selection-panel dl {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+        margin: 1.5rem 0 0;
+      }
+
+      .selection-panel dt,
+      .profile-facts dt {
+        color: var(--subtle);
+        font-size: 0.76rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .selection-panel dd,
+      .profile-facts dd {
+        margin: 0.15rem 0 0;
+      }
+
+      .overview-button {
+        margin-top: 1rem;
+        padding: 0.55rem 0.7rem;
+        border-radius: 8px;
+        background: transparent;
+      }
+
+      .overview-button:hover {
+        border-color: var(--cyan);
+      }
+
+      .text-equivalent {
+        margin-top: 1rem;
+        padding: 1rem 1rem 0;
+        border-left: 3px solid var(--cyan);
+        color: var(--muted);
+      }
+
+      .text-equivalent h3 {
+        color: var(--text);
+      }
+
+      .node-inventory {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.55rem 1rem;
+        padding-left: 1rem;
+      }
+
+      .photon-wrap {
+        padding: 1.5rem;
+        border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 4px);
+        background: linear-gradient(145deg, rgba(14, 31, 50, 0.9), rgba(7, 19, 33, 0.94));
+      }
+
+      .photon-diagram {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .photon-diagram .journey-rail {
+        fill: none;
+        stroke: #5e7187;
+        stroke-width: 4;
+      }
+
+      .photon-diagram .photon-signal {
+        fill: none;
+        stroke: var(--cyan);
+        stroke-width: 3;
+        stroke-dasharray: 8 7;
+      }
+
+      .photon-diagram .journey-node {
+        stroke: #88a0ba;
+        stroke-width: 2;
+        fill: #10243a;
+      }
+
+      .photon-diagram .journey-number {
+        fill: var(--text);
+        font: 500 15px ui-monospace, monospace;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+
+      .photon-diagram .journey-label {
+        fill: var(--text);
+        font: 500 13px system-ui, sans-serif;
+        text-anchor: middle;
+      }
+
+      .journey-list {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.8rem;
+        margin: 1.4rem 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: journey;
+      }
+
+      .journey-list li {
+        position: relative;
+        min-width: 0;
+        padding: 1rem 0 0 2.5rem;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        counter-increment: journey;
+      }
+
+      .journey-list li::before {
+        content: counter(journey, decimal-leading-zero);
+        position: absolute;
+        left: 0;
+        top: 0.78rem;
+        color: var(--cyan);
+        font-family: ui-monospace, monospace;
+      }
+
+      .journey-list strong {
+        display: block;
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      .layer-index {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .layer-card {
+        position: relative;
+        padding: 1.25rem 1.25rem 1.3rem;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(13, 28, 46, 0.72);
+      }
+
+      .layer-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 4px;
+        background: var(--layer-color);
+      }
+
+      .layer-card p:last-child {
+        margin-bottom: 0;
+      }
+
+      .layer-vendors {
+        color: var(--muted);
+      }
+
+      .layer-vendors strong {
+        color: var(--text);
+      }
+
+      .profile-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .company-profile {
+        position: relative;
+        padding: 1.35rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(13, 28, 46, 0.8);
+      }
+
+      .company-profile::after {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 3px;
+        border-radius: var(--radius) var(--radius) 0 0;
+        background: var(--layer-color);
+      }
+
+      .profile-heading {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: start;
+      }
+
+      .profile-heading h3 {
+        margin-bottom: 0.2rem;
+      }
+
+      .exposure-badge {
+        flex: 0 0 auto;
+        padding: 0.25rem 0.5rem;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        color: var(--text);
+        font-size: 0.73rem;
+      }
+
+      .role-line {
+        color: var(--muted);
+      }
+
+      .profile-facts {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        margin: 1.2rem 0;
+      }
+
+      .profile-facts > div {
+        min-width: 0;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--line);
+      }
+
+      .profile-source {
+        margin-bottom: 0;
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .layer-tag {
+        display: inline-block;
+        margin: 0.1rem 0.3rem 0.1rem 0;
+        color: var(--layer-color);
+        font-size: 0.7rem;
+      }
+
+      .claim-label {
+        display: inline-block;
+        margin-right: 0.4rem;
+        color: var(--cyan);
+        font-size: 0.68rem;
+      }
+
+      .claim-label.guidance {
+        color: var(--amber);
+      }
+
+      .claim-label.analysis {
+        color: var(--violet);
+      }
+
+      .comparison-scroller {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+      }
+
+      table {
+        width: 100%;
+        min-width: 1500px;
+        border-collapse: collapse;
+        background: rgba(9, 23, 39, 0.84);
+        font-size: 0.79rem;
+        line-height: 1.43;
+      }
+
+      caption {
+        padding: 1rem;
+        color: var(--muted);
+        text-align: left;
+      }
+
+      th,
+      td {
+        padding: 0.8rem;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+        text-align: left;
+      }
+
+      th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #14243a;
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      td:first-child,
+      th:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        min-width: 145px;
+        background: #102035;
+      }
+
+      th:first-child {
+        z-index: 3;
+        background: #172a42;
+      }
+
+      .synthesis-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .synthesis-card {
+        padding: 1.3rem;
+        border-top: 3px solid var(--cyan);
+        background: linear-gradient(180deg, rgba(18, 41, 65, 0.7), transparent);
+      }
+
+      .synthesis-card:nth-child(2) {
+        border-color: var(--amber);
+      }
+
+      .synthesis-card:nth-child(3) {
+        border-color: var(--green);
+      }
+
+      .synthesis-card:nth-child(4) {
+        border-color: var(--violet);
+      }
+
+      .synthesis-card p:last-child {
+        margin-bottom: 0;
+      }
+
+      .source-method {
+        display: grid;
+        grid-template-columns: minmax(0, 0.55fr) minmax(280px, 0.45fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .method-note,
+      .source-status {
+        padding: 1.2rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(13, 28, 46, 0.74);
+      }
+
+      .source-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.7rem 1rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .source-list li {
+        min-width: 0;
+        padding: 0.9rem 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .source-list strong,
+      .source-list span {
+        display: block;
+      }
+
+      .source-list strong {
+        font-weight: 500;
+      }
+
+      .source-list span {
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      footer {
+        padding: 2rem 0 3.5rem;
+        border-top: 1px solid var(--line);
+        color: var(--subtle);
+        font-size: 0.84rem;
+      }
+
+      @media (max-width: 1024px) {
+        .legend {
+          grid-template-columns: repeat(4, minmax(120px, 1fr));
+        }
+
+        .map-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .selection-panel {
+          min-height: auto;
+        }
+
+        .journey-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page-shell {
+          width: min(calc(100% - 1.2rem), var(--max));
+        }
+
+        .hero {
+          min-height: auto;
+        }
+
+        .hero-inner {
+          padding: 5rem 0 3.5rem;
+        }
+
+        section {
+          padding: 4rem 0;
+        }
+
+        .section-heading,
+        .taxonomy-grid,
+        .layer-index,
+        .profile-grid,
+        .synthesis-grid,
+        .source-method,
+        .source-list {
+          grid-template-columns: 1fr;
+        }
+
+        .legend {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .constellation-stage {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.65rem;
+          min-height: auto;
+          padding: 1rem;
+        }
+
+        .ecosystem-diagram {
+          display: none;
+        }
+
+        .ecosystem-core {
+          position: static;
+          grid-column: 1 / -1;
+          width: auto;
+          min-height: 92px;
+          aspect-ratio: auto;
+          transform: none;
+          border-radius: 12px;
+        }
+
+        .company-node {
+          position: static;
+          min-width: 0;
+          transform: none;
+        }
+
+        .company-node:hover {
+          transform: none;
+        }
+
+        .node-inventory,
+        .profile-facts {
+          grid-template-columns: 1fr;
+        }
+
+        .photon-wrap {
+          padding: 0.9rem;
+        }
+
+        .photon-diagram {
+          display: none;
+        }
+
+        .journey-list {
+          grid-template-columns: 1fr;
+          margin-top: 0;
+        }
+      }
+
+      @media (max-width: 430px) {
+        .constellation-stage {
+          grid-template-columns: 1fr;
+        }
+
+        .cutoff {
+          border-radius: 12px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to report</a>
+    <header class="hero">
+      <div class="page-shell hero-inner">
+        <p class="eyebrow">AI optics ecosystem · technical investor map</p>
+        <h1>Follow the photon.<br /><span>Follow the revenue.</span></h1>
+        <p class="hero-deck">
+          The AI network is not one market. It is a chain: tools make the photonics,
+          components create and read light, modules package the link, fiber carries it,
+          switches steer it, coherent systems stretch it, and test instruments prove it works.
+        </p>
+        <p class="cutoff" data-research-cutoff="2026-08-16">
+          Current through 2026-08-16 · every published factual claim live-verified
+        </p>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section id="ecosystem-map" aria-labelledby="ecosystem-title">
+        <div class="page-shell">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">01 · Company constellation</p>
+              <h2 id="ecosystem-title">Eleven companies, seven layers</h2>
+            </div>
+            <p>
+              Select a company to trace the path it owns. Layer filters emphasize matches;
+              every required company—including Lumentum—always remains visible.
+            </p>
+          </div>
+
+          <ul class="legend" aria-label="Ecosystem layer legend">
+            <li class="layer-fabrication"><strong>Fabrication</strong>Amber · upstream tools</li>
+            <li class="layer-components"><strong>Components</strong>Green · lasers and ICs</li>
+            <li class="layer-modules"><strong>Modules</strong>Green · packaged links</li>
+            <li class="layer-fiber"><strong>Fiber plant</strong>Rose · physical path</li>
+            <li class="layer-networking"><strong>Networking</strong>Violet · traffic control</li>
+            <li class="layer-transport"><strong>Transport</strong>Violet · coherent reach</li>
+            <li class="layer-test"><strong>Test</strong>Cyan · proof and assurance</li>
+          </ul>
+
+          <div class="taxonomy-grid">
+            <article class="taxonomy">
+              <h3>Exposure directness</h3>
+              <dl>
+                <dt>Direct</dt>
+                <dd>The product is deployed in the optical or network data path.</dd>
+                <dt>Enabling</dt>
+                <dd>The product makes or validates the path but is not deployed in it.</dd>
+                <dt>Indirect</dt>
+                <dd>Benefit comes from broad AI spend without link-specific dependency.</dd>
+              </dl>
+            </article>
+            <article class="taxonomy">
+              <h3>Business concentration</h3>
+              <dl>
+                <dt>Concentrated</dt>
+                <dd>Optics or immediately adjacent networking is the dominant driver.</dd>
+                <dt>Mixed</dt>
+                <dd>Optics is material beside other substantial businesses.</dd>
+                <dt>Diversified</dt>
+                <dd>Optics is one demand source inside a much broader portfolio.</dd>
+              </dl>
+            </article>
+          </div>
+
+          <div class="map-controls" role="group" aria-label="Emphasize companies by layer">
+            <button class="filter-button" id="show-all" type="button" data-layer-control="all" aria-pressed="true">Show all</button>
+            <button class="filter-button" type="button" data-layer-control="fabrication" aria-pressed="false">Fabrication</button>
+            <button class="filter-button" type="button" data-layer-control="components" aria-pressed="false">Components</button>
+            <button class="filter-button" type="button" data-layer-control="modules" aria-pressed="false">Modules</button>
+            <button class="filter-button" type="button" data-layer-control="fiber" aria-pressed="false">Fiber plant</button>
+            <button class="filter-button" type="button" data-layer-control="networking" aria-pressed="false">Networking</button>
+            <button class="filter-button" type="button" data-layer-control="transport" aria-pressed="false">Transport</button>
+            <button class="filter-button" type="button" data-layer-control="test" aria-pressed="false">Test</button>
+          </div>
+
+          <div class="map-layout">
+            <div class="constellation-stage" aria-label="AI optics company constellation">
+              <svg
+                class="ecosystem-diagram"
+                viewBox="0 0 800 680"
+                role="img"
+                aria-labelledby="ecosystem-svg-title ecosystem-svg-desc"
+                aria-describedby="ecosystem-equivalent"
+              >
+                <title id="ecosystem-svg-title">AI optics ecosystem company constellation</title>
+                <desc id="ecosystem-svg-desc">
+                  Eleven required public companies surround an AI fabric core. Their positions show
+                  fabrication, components, modules, fiber, networking, transport, and test roles.
+                </desc>
+                <ellipse class="orbit" cx="400" cy="340" rx="235" ry="210" />
+                <ellipse class="orbit" cx="400" cy="340" rx="330" ry="286" />
+                <path class="signal-line" data-connects="AMAT" d="M400 340 L122 103" />
+                <path class="signal-line" data-connects="COHR" d="M400 340 L292 125" />
+                <path class="signal-line" data-connects="LITE" d="M400 340 L500 107" />
+                <path class="signal-line" data-connects="MTSI" d="M400 340 L675 144" />
+                <path class="signal-line" data-connects="GLW" d="M400 340 L707 329" />
+                <path class="signal-line" data-connects="ANET" d="M400 340 L680 520" />
+                <path class="signal-line" data-connects="CSCO" d="M400 340 L505 588" />
+                <path class="signal-line" data-connects="CIEN" d="M400 340 L300 587" />
+                <path class="signal-line" data-connects="NOK" d="M400 340 L111 530" />
+                <path class="signal-line" data-connects="KEYS" d="M400 340 L98 345" />
+                <path class="signal-line" data-connects="VIAV" d="M400 340 L113 206" />
+              </svg>
+
+              <div class="ecosystem-core" aria-hidden="true">
+                <div><strong>AI fabric</strong><span>GPU ↔ switch ↔ GPU</span></div>
+              </div>
+
+              <button class="company-node layer-fabrication" type="button" style="--x: 15%; --y: 15%" data-ticker="AMAT" data-layers="fabrication" data-primary-layer="fabrication" aria-pressed="false">
+                <span class="ticker">AMAT</span><span class="node-name">Applied Materials</span><span class="node-role">Makes the makers</span>
+              </button>
+              <button class="company-node layer-components" type="button" style="--x: 36%; --y: 17%" data-ticker="COHR" data-layers="components modules" data-primary-layer="components" aria-pressed="false">
+                <span class="ticker">COHR</span><span class="node-name">Coherent</span><span class="node-role">Components + modules</span>
+              </button>
+              <button class="company-node layer-components" type="button" style="--x: 63%; --y: 14%" data-ticker="LITE" data-layers="components modules" data-primary-layer="components" aria-pressed="false">
+                <span class="ticker">LITE</span><span class="node-name">Lumentum</span><span class="node-role">Lasers + modules</span>
+              </button>
+              <button class="company-node layer-components" type="button" style="--x: 85%; --y: 21%" data-ticker="MTSI" data-layers="components" data-primary-layer="components" aria-pressed="false">
+                <span class="ticker">MTSI</span><span class="node-name">MACOM</span><span class="node-role">Drivers + TIAs</span>
+              </button>
+              <button class="company-node layer-fiber" type="button" style="--x: 88%; --y: 48%" data-ticker="GLW" data-layers="fiber" data-primary-layer="fiber" aria-pressed="false">
+                <span class="ticker">GLW</span><span class="node-name">Corning</span><span class="node-role">Fiber + cable plant</span>
+              </button>
+              <button class="company-node layer-networking" type="button" style="--x: 85%; --y: 76%" data-ticker="ANET" data-layers="networking" data-primary-layer="networking" aria-pressed="false">
+                <span class="ticker">ANET</span><span class="node-name">Arista</span><span class="node-role">Ethernet fabric</span>
+              </button>
+              <button class="company-node layer-networking" type="button" style="--x: 63%; --y: 86%" data-ticker="CSCO" data-layers="networking transport" data-primary-layer="networking" aria-pressed="false">
+                <span class="ticker">CSCO</span><span class="node-name">Cisco</span><span class="node-role">Fabric + coherent</span>
+              </button>
+              <button class="company-node layer-transport" type="button" style="--x: 37%; --y: 86%" data-ticker="CIEN" data-layers="transport" data-primary-layer="transport" aria-pressed="false">
+                <span class="ticker">CIEN</span><span class="node-name">Ciena</span><span class="node-role">Coherent transport</span>
+              </button>
+              <button class="company-node layer-transport" type="button" style="--x: 14%; --y: 77%" data-ticker="NOK" data-layers="transport" data-primary-layer="transport" aria-pressed="false">
+                <span class="ticker">NOK</span><span class="node-name">Nokia</span><span class="node-role">Optical systems</span>
+              </button>
+              <button class="company-node layer-test" type="button" style="--x: 12%; --y: 50%" data-ticker="KEYS" data-layers="test" data-primary-layer="test" aria-pressed="false">
+                <span class="ticker">KEYS</span><span class="node-name">Keysight</span><span class="node-role">Design + production test</span>
+              </button>
+              <button class="company-node layer-test" type="button" style="--x: 15%; --y: 29%" data-ticker="VIAV" data-layers="test" data-primary-layer="test" aria-pressed="false">
+                <span class="ticker">VIAV</span><span class="node-name">VIAVI</span><span class="node-role">Fabric + field test</span>
+              </button>
+            </div>
+
+            <aside class="selection-panel" id="selection-panel" aria-live="polite" aria-atomic="true">
+              <article id="company-overview" data-default-state="true">
+                <p class="kicker">Ecosystem overview</p>
+                <h3>Every layer can bottleneck the link.</h3>
+                <p>
+                  All eleven companies remain visible. Select a company to replace this overview
+                  with its product families, photon-path position, customers, competitors,
+                  catalyst, moat, and risk.
+                </p>
+                <dl>
+                  <div><dt>Exposure</dt><dd><strong>Direct</strong> path: COHR, LITE, MTSI, GLW, ANET, CSCO, CIEN, NOK. <strong>Enabling</strong>: AMAT, KEYS, VIAV. <strong>Indirect</strong> is reserved for broad AI benefit without a link-specific product.</dd></div>
+                  <div><dt>Concentration</dt><dd><strong>Concentrated</strong>, <strong>Mixed</strong>, and <strong>Diversified</strong> describe how much the optics role can move the whole company.</dd></div>
+                  <div><dt>Why two taxonomies?</dt><dd>A direct product can still belong to a diversified company; exposure and concentration are separate.</dd></div>
+                  <div><dt>Filter behavior</dt><dd>Matches receive emphasis. Nonmatches become dashed and dimmed, never hidden.</dd></div>
+                </dl>
+              </article>
+              <article id="company-detail" data-active-ticker="" data-preview-ticker="" hidden>
+                <p class="kicker">Company lens</p>
+                <h3 data-detail-field="company"></h3>
+                <p data-detail-field="role"></p>
+                <dl>
+                  <div><dt>Representative products</dt><dd data-detail-field="products"></dd></div>
+                  <div><dt>Photon path</dt><dd data-detail-field="path"></dd></div>
+                  <div><dt>Customers</dt><dd data-detail-field="customers"></dd></div>
+                  <div><dt>Primary competitors</dt><dd data-detail-field="competitors"></dd></div>
+                  <div><dt>AI catalyst</dt><dd data-detail-field="catalyst"></dd></div>
+                  <div><dt>Moat / principal risk</dt><dd data-detail-field="moat-risk"></dd></div>
+                  <div><dt>Exposure</dt><dd data-detail-field="exposure"></dd></div>
+                  <div><dt>Business concentration</dt><dd data-detail-field="concentration"></dd></div>
+                </dl>
+              </article>
+            </aside>
+          </div>
+
+          <div class="text-equivalent" id="ecosystem-equivalent">
+            <h3>Constellation text equivalent</h3>
+            <p>
+              The center is the GPU-to-GPU AI fabric. Required companies are grouped by their
+              primary role; multi-layer memberships are stated explicitly.
+            </p>
+            <ul class="node-inventory">
+              <li>Fabrication: <a href="#profile-AMAT">AMAT</a></li>
+              <li>Components + modules: <a href="#profile-COHR">COHR</a>, <a href="#profile-LITE">LITE</a></li>
+              <li>Components: <a href="#profile-MTSI">MTSI</a></li>
+              <li>Fiber plant: <a href="#profile-GLW">GLW</a></li>
+              <li>Networking: <a href="#profile-ANET">ANET</a></li>
+              <li>Networking + transport: <a href="#profile-CSCO">CSCO</a></li>
+              <li>Transport: <a href="#profile-CIEN">CIEN</a>, <a href="#profile-NOK">NOK</a></li>
+              <li>Test: <a href="#profile-KEYS">KEYS</a>, <a href="#profile-VIAV">VIAV</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="photon-journey" aria-labelledby="journey-title">
+        <div class="page-shell">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">02 · Physical sequence</p>
+              <h2 id="journey-title">One signal, eight commercial touchpoints</h2>
+            </div>
+            <p>
+              The photon is born only after the GPU creates an electrical bitstream. At long
+              distances the link changes from short-reach direct detect to coherent transport.
+            </p>
+          </div>
+
+          <div class="photon-wrap">
+            <svg
+              class="photon-diagram"
+              viewBox="0 0 1160 330"
+              role="img"
+              aria-labelledby="photon-svg-title photon-svg-desc"
+              aria-describedby="journey-equivalent"
+            >
+              <title id="photon-svg-title">Photon journey through an AI datacenter</title>
+              <desc id="photon-svg-desc">
+                Eight numbered stages run from accelerator SerDes through switching, optical
+                transmission, fiber, reception, coherent transport, and validation.
+              </desc>
+              <path class="journey-rail" d="M85 165 H1075" />
+              <path class="photon-signal" d="M85 165 H1075" />
+              <g transform="translate(85 165)"><circle class="journey-node" r="29" /><text class="journey-number">1</text><text class="journey-label" y="-56">GPU SerDes</text></g>
+              <g transform="translate(226 165)"><circle class="journey-node" r="29" /><text class="journey-number">2</text><text class="journey-label" y="-56">Switch ASIC</text></g>
+              <g transform="translate(367 165)"><circle class="journey-node" r="29" /><text class="journey-number">3</text><text class="journey-label" y="-56">Drive + modulate</text></g>
+              <g transform="translate(508 165)"><circle class="journey-node" r="29" /><text class="journey-number">4</text><text class="journey-label" y="-56">Laser + engine</text></g>
+              <g transform="translate(649 165)"><circle class="journey-node" r="29" /><text class="journey-number">5</text><text class="journey-label" y="-56">Fiber plant</text></g>
+              <g transform="translate(790 165)"><circle class="journey-node" r="29" /><text class="journey-number">6</text><text class="journey-label" y="-56">Receive + recover</text></g>
+              <g transform="translate(931 165)"><circle class="journey-node" r="29" /><text class="journey-number">7</text><text class="journey-label" y="-56">Coherent reach</text></g>
+              <g transform="translate(1075 165)"><circle class="journey-node" r="29" /><text class="journey-number">8</text><text class="journey-label" y="-56">Validate</text></g>
+              <text class="journey-label" x="580" y="272">electrons → photons → electrons · repeat across switches, racks, and sites</text>
+            </svg>
+
+            <ol class="journey-list" id="journey-equivalent">
+              <li data-journey-step><strong>Accelerator demand origin</strong><a href="#layer-demand">NVIDIA, AMD, and custom accelerators</a> emit electrical SerDes lanes and create the bandwidth requirement.</li>
+              <li data-journey-step><strong>Switch ASIC + lanes</strong><a href="#profile-ANET">Arista</a>, <a href="#profile-CSCO">Cisco</a>, NVIDIA, Broadcom, and Marvell steer traffic into high-speed electrical lanes.</li>
+              <li data-journey-step><strong>DSP, driver, modulator</strong><a href="#profile-MTSI">MACOM</a>, <a href="#profile-COHR">Coherent</a>, Lumentum, Marvell, and Broadcom condition and modulate the signal.</li>
+              <li data-journey-step><strong>Laser + optical engine</strong><a href="#profile-COHR">Coherent</a> and <a href="#profile-LITE">Lumentum</a> supply EML, CW, VCSEL, SiPh, and packaged-engine options.</li>
+              <li data-journey-step><strong>Fiber + connector path</strong><a href="#profile-GLW">Corning</a>, SENKO, US Conec, and AFL/Fujikura carry and organize the photons.</li>
+              <li data-journey-step><strong>Photodiode, TIA, DSP</strong><a href="#profile-MTSI">MACOM</a>, <a href="#profile-COHR">Coherent</a>, Lumentum, and Marvell turn light back into recoverable electrical data.</li>
+              <li data-journey-step><strong>Scale-across transport</strong><a href="#profile-CIEN">Ciena</a>, <a href="#profile-NOK">Nokia</a>, and <a href="#profile-CSCO">Cisco</a> use coherent DSPs and line systems when distance demands it.</li>
+              <li data-journey-step><strong>Validation around the path</strong><a href="#profile-KEYS">Keysight</a>, <a href="#profile-VIAV">VIAVI</a>, and Anritsu test components, modules, fabrics, production, and field links.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section id="layer-index" aria-labelledby="layers-title">
+        <div class="page-shell">
+          <div class="section-heading">
+            <div>
+              <p class="kicker">03 · Layer index</p>
+              <h2 id="layers-title">What is bought, and by whom</h2>
+            </div>
+            <p>
+              Context vendors make the competitive map legible without turning every peer into
+              an interactive node. The lists are representative, not exhaustive rankings.
+            </p>
+          </div>
+
+          <div class="layer-index">
+            <article class="layer-card layer-networking" id="layer-demand">
+              <p class="ticker">Demand origin · not a constellation layer</p>
+              <h3>Accelerators and platform owners</h3>
+              <p>GPU and custom-accelerator platforms determine lane speed, topology, reach, power budget, and the choice between copper, pluggable optics, NPO, and CPO.</p>
+              <p class="layer-vendors"><strong>Representative:</strong> NVIDIA, AMD, hyperscaler custom accelerators.</p>
+            </article>
+            <article class="layer-card layer-fabrication" id="layer-fabrication">
+              <p class="ticker">Layer 1</p><h3>Wafer fabrication + advanced packaging</h3>
+              <p>Deposition, etch, lithography, inspection, epitaxy, hybrid bonding, and packaging turn optical and electronic designs into manufacturable devices.</p>
+              <p class="layer-vendors"><strong>Required:</strong> Applied Materials. <strong>Context:</strong> KLA, Lam Research, ASML.</p>
+            </article>
+            <article class="layer-card layer-components" id="layer-components">
+              <p class="ticker">Layer 2</p><h3>Photonic + electronic components</h3>
+              <p>EMLs, CW lasers, VCSELs, silicon photonics, modulators, drivers, TIAs, photodiodes, and DSPs create and recover the optical signal.</p>
+              <p class="layer-vendors"><strong>Required:</strong> Coherent, Lumentum, MACOM. <strong>Context:</strong> Broadcom, Marvell, Semtech, Tower Semiconductor.</p>
+            </article>
+            <article class="layer-card layer-modules" id="layer-modules">
+              <p class="ticker">Layer 3</p><h3>Transceivers, engines + manufacturing</h3>
+              <p>400G, 800G, and 1.6T pluggables or optical engines package photonics, electronics, thermal design, connectors, firmware, and test into a usable link.</p>
+              <p class="layer-vendors"><strong>Required:</strong> Coherent, Lumentum. <strong>Context:</strong> InnoLight, Eoptolink, Accelink, Fabrinet.</p>
+            </article>
+            <article class="layer-card layer-fiber" id="layer-fiber">
+              <p class="ticker">Layer 4</p><h3>Fiber, connectors + cable plant</h3>
+              <p>Single-mode and multicore fiber, ribbon cable, high-density connectors, shuffles, patching, and structured cabling form the physical optical path.</p>
+              <p class="layer-vendors"><strong>Required:</strong> Corning. <strong>Context:</strong> SENKO, US Conec, AFL/Fujikura.</p>
+            </article>
+            <article class="layer-card layer-networking" id="layer-networking">
+              <p class="ticker">Layer 5</p><h3>Datacenter switching + routing</h3>
+              <p>Switch ASICs, SerDes, systems, front-panel optics, congestion control, telemetry, and operating software keep GPUs fed with data.</p>
+              <p class="layer-vendors"><strong>Required:</strong> Arista, Cisco. <strong>Context:</strong> NVIDIA networking, Broadcom, Marvell, HPE/Juniper.</p>
+            </article>
+            <article class="layer-card layer-transport" id="layer-transport">
+              <p class="ticker">Layer 6</p><h3>Coherent DCI + optical transport</h3>
+              <p>Coherent DSPs, transponders, ROADMs, amplifiers, line systems, and IP-over-DWDM move high-capacity wavelengths across campuses and regions.</p>
+              <p class="layer-vendors"><strong>Required:</strong> Ciena, Nokia, Cisco. <strong>Context:</strong> Infinera heritage inside Nokia; HPE/Juniper routing.</p>
+            </article>
+            <article class="layer-card layer-test" id="layer-test">
+              <p class="ticker">Layer 7</p><h3>Design, manufacturing + field test</h3>
+              <p>BERTs, sampling and real-time oscilloscopes, TDECQ, traffic emulation, optical measurement, assurance, and field tools validate the entire lifecycle.</p>
+              <p class="layer-vendors"><strong>Required:</strong> Keysight, VIAVI. <strong>Context:</strong> Anritsu.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="company-profiles" aria-labelledby="profiles-title">
+        <div class="page-shell">
+          <div class="section-heading">
+            <div><p class="kicker">04 · Company profiles</p><h2 id="profiles-title">Products first, ticker second</h2></div>
+            <p>Each profile uses the same lens: product, photon position, buyer, competition, catalyst, moat, risk, directness, and concentration.</p>
+          </div>
+
+          <div class="profile-grid">
+            <article class="company-profile layer-fabrication" id="profile-AMAT" data-ticker="AMAT" data-exposure="enabling" data-concentration="diversified">
+              <div class="profile-heading"><div><span class="ticker">AMAT</span><h3>Applied Materials</h3></div><span class="exposure-badge">Enabling · diversified</span></div>
+              <p class="role-line">Makes process and packaging equipment used before a photonic device ever sees a rack.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>Kinex hybrid bonding, Centura Prime Epi, Producer deposition, and SEMVision inspection support advanced logic, HBM, silicon-photonics, and heterogeneous-package workflows.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · fabrication/packaging</span></dd></div>
+                <div><dt>Photon position</dt><dd>Upstream device and package manufacture.</dd></div>
+                <div><dt>Buyer</dt><dd>Foundries, memory makers, IDMs, and advanced packagers.</dd></div>
+                <div><dt>Peers</dt><dd>KLA, Lam Research, ASML.</dd></div>
+                <div><dt>AI catalyst</dt><dd>More process steps, HBM, hybrid bonding, SiPh, and CPO packaging complexity.</dd></div>
+                <div><dt>Moat</dt><dd>Materials engineering breadth, installed base, and Applied Global Services.</dd></div>
+                <div><dt>Main risk</dt><dd>WFE cyclicality, export controls, and optics being a small application inside a broad business.</dd></div>
+                <div><dt>Revenue lens</dt><dd>Tool and service economics; no direct optical-link unit sensitivity.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://www.appliedmaterials.com/eu/en/product-library/kinex-integrated-die-to-wafer-hybrid-bonding-system.html">Kinex product page</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://www.appliedmaterials.com/us/en/the-ai-era.html">The AI Era</a></p>
+            </article>
+
+            <article class="company-profile layer-components" id="profile-COHR" data-ticker="COHR" data-exposure="direct" data-concentration="concentrated">
+              <div class="profile-heading"><div><span class="ticker">COHR</span><h3>Coherent</h3></div><span class="exposure-badge">Direct · concentrated</span></div>
+              <p class="role-line">The broadest vertical stack here: lasers and ICs through transceivers, CPO engines, cables, and optical circuit switches.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>Its current portfolio includes a 1.6T-DR8 OSFP, high-power InP CW lasers and external sources, silicon-photonics/VCSEL CPO demonstrations, and a 300×300 OCS.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · components</span><span class="layer-tag">Also · modules</span></dd></div>
+                <div><dt>Photon position</dt><dd>Create, modulate, package, receive, and optically switch light.</dd></div>
+                <div><dt>Buyer</dt><dd>Cloud/AI operators, module and network-equipment vendors.</dd></div>
+                <div><dt>Peers</dt><dd>Lumentum, InnoLight, Eoptolink, Accelink, Broadcom, Marvell.</dd></div>
+                <div><dt>AI catalyst</dt><dd>1.6T, higher lane rates, CPO/ELS, and OCS capacity expansion.</dd></div>
+                <div><dt>Moat</dt><dd>InP, VCSEL, SiPh, passives, packaging, modules, and OCS under one roof.</dd></div>
+                <div><dt>Main risk</dt><dd>Customer concentration, heavy capex, yield/ramp execution, and architecture substitution.</dd></div>
+                <div><dt>Revenue lens</dt><dd>Direct unit/content growth with manufacturing and pricing leverage in both directions.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://www.coherent.com/networking/transceivers/datacom/FTCF2519E1PCM">1.6T-DR8 OSFP</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://www.coherent.com/news/press-releases/coherent-co-packaged-optics-cpo-technologies-ofc-2026">OFC 2026 CPO technologies</a></p>
+            </article>
+
+            <article class="company-profile layer-components" id="profile-LITE" data-ticker="LITE" data-exposure="direct" data-concentration="concentrated">
+              <div class="profile-heading"><div><span class="ticker">LITE</span><h3>Lumentum</h3></div><span class="exposure-badge">Direct · concentrated</span></div>
+              <p class="role-line">An InP laser specialist that now spans chips, datacom modules, external CPO light sources, and OCS.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>Verified products include 200G EMLs, A6/UHP CW lasers, ELSFP-350, 1.6T 2×DR4 TRO modules, CloudLight transceivers, and R300 OCS.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · components</span><span class="layer-tag">Also · modules</span></dd></div>
+                <div><dt>Photon position</dt><dd>Laser and modulator source; packaged transmit/receive link.</dd></div>
+                <div><dt>Buyer</dt><dd>Hyperscalers, AI platforms, module makers, and equipment OEMs.</dd></div>
+                <div><dt>Peers</dt><dd>Coherent, InnoLight, Eoptolink, Accelink, Broadcom.</dd></div>
+                <div><dt>AI catalyst</dt><dd>1.6T at 200G/lane, 400G/lane pathfinding, CPO/NPO sources, and OCS.</dd></div>
+                <div><dt>Moat</dt><dd>Internal InP foundry, high-volume EML/CW heritage, and chip-to-module breadth.</dd></div>
+                <div><dt>Main risk</dt><dd>Large customers, yield/capacity execution, pricing, and shifts among EML, SiPh, VCSEL, and CPO.</dd></div>
+                <div><dt>Revenue lens</dt><dd>High directness; mix can shift between component value and lower-margin module assembly.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://www.lumentum.com/en/products/eml-200g-pam4-cwdm-laser">200G EML</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://www.lumentum.com/en/products/data-center/datacom-transceivers">Datacom transceivers</a></p>
+            </article>
+
+            <article class="company-profile layer-components" id="profile-MTSI" data-ticker="MTSI" data-exposure="direct" data-concentration="mixed">
+              <div class="profile-heading"><div><span class="ticker">MTSI</span><h3>MACOM</h3></div><span class="exposure-badge">Direct · mixed</span></div>
+              <p class="role-line">Supplies the high-speed analog electronics between SerDes, lasers/modulators, photodiodes, and DSPs.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>MAOM-022404 and MAOM-025408 address 400G/lane EML/Mach-Zehnder drive; MALD-40225 and MATA-03819 cover 200G/lane drive and receive TIA functions.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · components</span></dd></div>
+                <div><dt>Photon position</dt><dd>Driver on transmit; TIA immediately after photodiode on receive.</dd></div>
+                <div><dt>Buyer</dt><dd>Module, subsystem, and network-equipment manufacturers.</dd></div>
+                <div><dt>Peers</dt><dd>Broadcom, Marvell, Semtech, Coherent.</dd></div>
+                <div><dt>AI catalyst</dt><dd>200G/lane 1.6T, 400G/lane 3.2T, LPO/TRO, and more analog content.</dd></div>
+                <div><dt>Moat</dt><dd>Analog/RF design depth, compound-semiconductor process breadth, and long design-ins.</dd></div>
+                <div><dt>Main risk</dt><dd>Design loss, customer insourcing, merchant pricing, and non-datacenter cyclicality.</dd></div>
+                <div><dt>Revenue lens</dt><dd>Component content can scale efficiently, but volumes and ASPs reset at each design cycle.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://www.macom.com/updates/news/2026/macom-announces-two-new-448g-per-lane-drivers-for-3-2t-data-cent">448G/lane drivers</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://www.macom.com/products/product-detail/MAOM-022404">MAOM-022404</a></p>
+            </article>
+
+            <article class="company-profile layer-fiber" id="profile-GLW" data-ticker="GLW" data-exposure="direct" data-concentration="mixed">
+              <div class="profile-heading"><div><span class="ticker">GLW</span><h3>Corning</h3></div><span class="exposure-badge">Direct · mixed</span></div>
+              <p class="role-line">Owns the physical medium and increasingly the high-density connectivity system surrounding it.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>GlassWorks AI combines four-core multicore fiber, cable, lens connectivity, shuffle solutions, and engineered racks; 2026 partnerships expand U.S. AI connectivity capacity.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · fiber/cable plant</span></dd></div>
+                <div><dt>Photon position</dt><dd>The passive path inside racks and across buildings/campuses.</dd></div>
+                <div><dt>Buyer</dt><dd>Hyperscalers, datacenter owners, installers, and cable assemblers.</dd></div>
+                <div><dt>Peers</dt><dd>SENKO, US Conec, AFL/Fujikura, Sumitomo Electric.</dd></div>
+                <div><dt>AI catalyst</dt><dd>Fiber-count density, multicore fiber, CPO attachment, and new capacity agreements.</dd></div>
+                <div><dt>Moat</dt><dd>Glass science, integrated fiber/cable/connectivity, manufacturing, and field engineering.</dd></div>
+                <div><dt>Main risk</dt><dd>Capacity execution, project timing, pricing, and non-optical businesses diluting sensitivity.</dd></div>
+                <div><dt>Revenue lens</dt><dd>Direct volume and content exposure with project/capacity lead times rather than semiconductor ASPs.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://www.corning.com/optical-communications/worldwide/en/home/solutions/glassworks-ai.html">GlassWorks AI</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://investor.corning.com/news-and-events/news/news-details/2026/NVIDIA-and-Corning-Announce-Long-Term-Partnership-To-Strengthen-U-S--Manufacturing-for-AI-Infrastructure/default.aspx">NVIDIA partnership</a></p>
+            </article>
+
+            <article class="company-profile layer-networking" id="profile-ANET" data-ticker="ANET" data-exposure="direct" data-concentration="concentrated">
+              <div class="profile-heading"><div><span class="ticker">ANET</span><h3>Arista Networks</h3></div><span class="exposure-badge">Direct · concentrated</span></div>
+              <p class="role-line">Controls AI Ethernet traffic at system level, where switch silicon, optics, EOS, and telemetry meet.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>The 7060XE7 portfolio targets 102.4T switching with high-density 1.6T/800G and LPO support; Etherlink adds AI-oriented systems with EOS/NetDL operations.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · networking</span></dd></div>
+                <div><dt>Photon position</dt><dd>Switch ASIC, electrical lanes, optical ports, congestion control, and fabric software.</dd></div>
+                <div><dt>Buyer</dt><dd>Cloud/AI titans, neoclouds, service providers, enterprises.</dd></div>
+                <div><dt>Peers</dt><dd>Cisco, NVIDIA networking, HPE/Juniper, merchant-silicon systems.</dd></div>
+                <div><dt>AI catalyst</dt><dd>102.4T fabrics, 1.6T ports, LPO, and larger Ethernet scale-out clusters.</dd></div>
+                <div><dt>Moat</dt><dd>EOS/NetDL, telemetry, fast system execution, and cloud design partnerships.</dd></div>
+                <div><dt>Main risk</dt><dd>Two-customer concentration, merchant silicon, hyperscaler insourcing, NVIDIA vertical integration.</dd></div>
+                <div><dt>Revenue lens</dt><dd>System/software value can exceed optics BOM value but follows cluster/network architecture choices.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Introduces-Next-Generation-1-6Terabit-Portfolio-for-AI-Fabrics/default.aspx">1.6T AI fabric portfolio</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://www.sec.gov/Archives/edgar/data/1596532/000159653226000013/anet-20251231.htm">2025 Form 10-K</a></p>
+            </article>
+
+            <article class="company-profile layer-networking" id="profile-CSCO" data-ticker="CSCO" data-exposure="direct" data-concentration="mixed">
+              <div class="profile-heading"><div><span class="ticker">CSCO</span><h3>Cisco Systems</h3></div><span class="exposure-badge">Direct · mixed</span></div>
+              <p class="role-line">Spans the widest systems stack: switch silicon, Nexus/8000 platforms, datacenter optics, and Acacia coherent links.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>G300 is a 102.4-Tbps Silicon One ASIC; announced systems pair it with 1.6T OSFP and 800G LPO, while 800G ZR/ZR+ supports DCI and scale-across.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · networking</span><span class="layer-tag">Also · transport</span></dd></div>
+                <div><dt>Photon position</dt><dd>Switching, routing, datacenter optics, and coherent DCI.</dd></div>
+                <div><dt>Buyer</dt><dd>Hyperscalers, neoclouds, enterprises, service providers.</dd></div>
+                <div><dt>Peers</dt><dd>Arista, NVIDIA, HPE/Juniper, Ciena, Nokia, merchant-silicon systems.</dd></div>
+                <div><dt>AI catalyst</dt><dd>G300/102.4T, 1.6T and LPO adoption, and Acacia coherent growth.</dd></div>
+                <div><dt>Moat</dt><dd>Silicon-to-software integration, optics, security, observability, and installed base.</dd></div>
+                <div><dt>Main risk</dt><dd>Broad portfolio dilutes optics, while AI Ethernet competition and customer insourcing intensify.</dd></div>
+                <div><dt>Revenue lens</dt><dd>Broad systems/subscription/service economics; optics is one product vector, not the whole P&amp;L.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://newsroom.cisco.com/c/r/newsroom/en/us/a/y2026/m02/cisco-announces-new-silicon-one-g300.html">Silicon One G300 announcement</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://s21.q4cdn.com/812015656/files/doc_events/2026/02/Q2FY26-Prepared-Remarks-1.pdf">Q2 FY2026 remarks</a></p>
+            </article>
+
+            <article class="company-profile layer-transport" id="profile-CIEN" data-ticker="CIEN" data-exposure="direct" data-concentration="concentrated">
+              <div class="profile-heading"><div><span class="ticker">CIEN</span><h3>Ciena</h3></div><span class="exposure-badge">Direct · concentrated</span></div>
+              <p class="role-line">A coherent-transport pure play relative to the rest of this set, monetizing distance and fiber efficiency.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>WaveLogic 6 Extreme supports 1.6T coherent wavelengths; WL6 Nano, Waveserver, 6500/RLS, coherent routing, software, and services cover DCI through long haul.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · transport</span></dd></div>
+                <div><dt>Photon position</dt><dd>Coherent DSP/modulation plus line systems across campus, metro, long haul, and subsea.</dd></div>
+                <div><dt>Buyer</dt><dd>Cloud providers, carriers, service providers, governments, enterprises.</dd></div>
+                <div><dt>Peers</dt><dd>Nokia, Cisco/Acacia, other coherent DSP/transport vendors.</dd></div>
+                <div><dt>AI catalyst</dt><dd>Distributed AI campuses, DCI wavelengths, coherent pluggables, and fiber-capacity upgrades.</dd></div>
+                <div><dt>Moat</dt><dd>Coherent DSP/electro-optics, reach, spectral efficiency, installed platforms, automation.</dd></div>
+                <div><dt>Main risk</dt><dd>Cloud/carrier concentration, capex cycles, qualifications, and coherent competition.</dd></div>
+                <div><dt>Revenue lens</dt><dd>System-heavy economics with software/services, but large projects and customer timing create volatility.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://www.ciena.com/products/wavelogic/wavelogic-family">WaveLogic family</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://www.ciena.com/about/newsroom/press-releases/ciena-brings-ai-networking-expertise-to-ofc-2026">OFC 2026 portfolio</a></p>
+            </article>
+
+            <article class="company-profile layer-transport" id="profile-NOK" data-ticker="NOK" data-exposure="direct" data-concentration="mixed">
+              <div class="profile-heading"><div><span class="ticker">NOK</span><h3>Nokia</h3></div><span class="exposure-badge">Direct · mixed</span></div>
+              <p class="role-line">Combines Nokia PSE and Infinera ICE coherent engines inside a broad fixed, mobile, IP, and optical network portfolio.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>PSE-6s and ICE7 support 1.2T coherent operation in 1830/ICE platforms; the Infinera acquisition closed in February 2025.</p>
+              <p data-claim-type="guidance"><span class="claim-label guidance">Roadmap</span>The application-optimized 1.6T/2.4T/3.2T family announced in March 2026 is expected to begin sampling in mid-2027—not current shipment.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · transport</span></dd></div>
+                <div><dt>Photon position</dt><dd>Coherent engines and optical line systems across DCI to subsea.</dd></div>
+                <div><dt>Buyer</dt><dd>Service providers, webscalers, enterprises, governments.</dd></div>
+                <div><dt>Peers</dt><dd>Ciena, Cisco/Acacia, other coherent transport vendors.</dd></div>
+                <div><dt>AI catalyst</dt><dd>Combined PSE/ICE roadmap, more webscale reach, and scale-across demand.</dd></div>
+                <div><dt>Moat</dt><dd>Two coherent IP families, integrated photonics/DSP, installed base, carrier relationships.</dd></div>
+                <div><dt>Main risk</dt><dd>Infinera integration, roadmap consolidation, telecom capex, and broad non-optical exposure.</dd></div>
+                <div><dt>Revenue lens</dt><dd>Optical product upside is diluted by much larger mobile/fixed and licensing businesses.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://www.nokia.com/optical-networks/pse-6s/">PSE-6s</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://www.nokia.com/newsroom/nokia-completes-acquisition-of-infinera-to-create-innovation-powerhouse-in-optical-networks-with-the-scale-to-power-the-data-center-revolution/">Infinera acquisition close</a></p>
+            </article>
+
+            <article class="company-profile layer-test" id="profile-KEYS" data-ticker="KEYS" data-exposure="enabling" data-concentration="diversified">
+              <div class="profile-heading"><div><span class="ticker">KEYS</span><h3>Keysight Technologies</h3></div><span class="exposure-badge">Enabling · diversified</span></div>
+              <p class="role-line">Measures the electrical and optical physics that must work before a 1.6T product can ship.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>DCA-M/FlexOTO supports multilane 1.6T optical manufacturing test; M8050A BERT and UXR systems validate stressed 224G electrical/optical interfaces.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · test</span></dd></div>
+                <div><dt>Photon position</dt><dd>Outside the path: R&amp;D, conformance, debug, and production.</dd></div>
+                <div><dt>Buyer</dt><dd>Semiconductor, module, switch, cable, and equipment engineering teams.</dd></div>
+                <div><dt>Peers</dt><dd>VIAVI, Anritsu, other high-speed test vendors.</dd></div>
+                <div><dt>AI catalyst</dt><dd>224G lanes, 1.6T/CPO, wider bandwidth, and more parallel production measurements.</dd></div>
+                <div><dt>Moat</dt><dd>Electrical-to-optical stack, proprietary instruments, automation, standards expertise.</dd></div>
+                <div><dt>Main risk</dt><dd>Reusable tools, lumpy R&amp;D budgets, and broad wireless/industrial/A&amp;D exposure.</dd></div>
+                <div><dt>Revenue lens</dt><dd>Early-cycle picks-and-shovels exposure with high value per instrument but low unit correlation to optics shipments.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://www.keysight.com/us/en/use-cases/optimize-1-6t-optical-transceiver-manufacturing-tests.html">1.6T manufacturing test</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://www.keysight.com/us/en/use-cases/test-1-6t-optical-receiver-conformance.html">1.6T receiver conformance</a></p>
+            </article>
+
+            <article class="company-profile layer-test" id="profile-VIAV" data-ticker="VIAV" data-exposure="enabling" data-concentration="mixed">
+              <div class="profile-heading"><div><span class="ticker">VIAV</span><h3>VIAVI Solutions</h3></div><span class="exposure-badge">Enabling · mixed</span></div>
+              <p class="role-line">Tests not only the optical waveform but the multi-vendor AI fabric, workload behavior, production line, and field network.</p>
+              <p data-claim-type="reported"><span class="claim-label">Reported</span>TestCenter D2 provides four 1.6T OSFP ports with AI workload and RoCE emulation; ONE LabPro, ONT, assurance, and field tools extend the lifecycle.</p>
+              <dl class="profile-facts">
+                <div><dt>Layers</dt><dd><span class="layer-tag">Primary · test</span></dd></div>
+                <div><dt>Photon position</dt><dd>Outside/around the path: physical link through L2–L7 fabric and field assurance.</dd></div>
+                <div><dt>Buyer</dt><dd>Cloud operators, OEMs, module makers, service providers, field teams.</dd></div>
+                <div><dt>Peers</dt><dd>Keysight, Anritsu, other optical/network test vendors.</dd></div>
+                <div><dt>AI catalyst</dt><dd>1.6T rollout, workload emulation, interoperability, robustness, and assurance.</dd></div>
+                <div><dt>Moat</dt><dd>L0–L7 breadth, realistic AI traffic, lab-to-field portfolio, assurance installed base.</dd></div>
+                <div><dt>Main risk</dt><dd>Acquisition integration, uneven budgets, product timing, and substantial non-AI businesses.</dd></div>
+                <div><dt>Revenue lens</dt><dd>More network-scale sensitivity than pure scopes/BERTs, but still enabling rather than deployed-path exposure.</dd></div>
+              </dl>
+              <p class="profile-source">Primary: <a class="source-link" data-verified-at="2026-08-16" href="https://investor.viavisolutions.com/news-events/news-releases/news-details/2026/VIAVI-Launches-TestCenter-D2-1-6T-Appliance-to-Accelerate-AI-Infrastructure-Rollouts-Across-Hyperscale-and-Cloud-Data-Center-Environments/default.aspx">TestCenter D2 1.6T</a> · <a class="source-link" data-verified-at="2026-08-16" href="https://www.viavisolutions.com/en-us/solutions/ai-data-center-networking-test">AI datacenter test portfolio</a></p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="comparison" aria-labelledby="comparison-title">
+        <div class="page-shell">
+          <div class="section-heading">
+            <div><p class="kicker">05 · Cross-company comparison</p><h2 id="comparison-title">Where exposure turns into P&amp;L</h2></div>
+            <p>Qualitative classifications avoid false precision. “Capital intensity” describes the vendor’s delivery model, not the customer’s datacenter capex.</p>
+          </div>
+          <div class="comparison-scroller" role="region" aria-label="Scrollable company comparison" tabindex="0">
+            <table>
+              <caption>Eleven-company AI optics comparison. Horizontal scrolling is contained inside this table region on narrow screens.</caption>
+              <thead><tr>
+                <th data-field="company">Company</th><th data-field="primary-layer">Primary layer</th><th data-field="also-present">Also present in</th><th data-field="exposure">Exposure</th><th data-field="business-concentration">Business concentration</th><th data-field="economics">Component vs. system economics</th><th data-field="recurring">Recurring / service</th><th data-field="customer-concentration">Customer concentration</th><th data-field="capital-intensity">Capital intensity</th><th data-field="catalyst">Main catalyst</th><th data-field="risk">Main risk</th>
+              </tr></thead>
+              <tbody>
+                <tr class="company-row" data-ticker="AMAT"><td><strong>AMAT</strong><br />Applied Materials</td><td>Fabrication + packaging</td><td>None</td><td>Enabling — tools make devices</td><td>Diversified</td><td>High-value process tools</td><td>Material AGS spares/service</td><td>High: two major customers</td><td>High R&amp;D; customers fund fabs</td><td>Packaging/SiPh complexity</td><td>WFE cycle; indirect optics link</td></tr>
+                <tr class="company-row" data-ticker="COHR"><td><strong>COHR</strong><br />Coherent</td><td>Components</td><td>Modules</td><td>Direct — light source to link</td><td>Concentrated</td><td>Vertical components + modules</td><td>Mostly product</td><td>High hyperscaler sensitivity</td><td>High internal fabs/capacity</td><td>1.6T, CPO/ELS, OCS</td><td>Yield, capex, architecture shifts</td></tr>
+                <tr class="company-row" data-ticker="LITE"><td><strong>LITE</strong><br />Lumentum</td><td>Components</td><td>Modules</td><td>Direct — lasers and links</td><td>Concentrated</td><td>InP components + modules</td><td>Mostly product</td><td>High cloud/customer sensitivity</td><td>High InP/capacity investment</td><td>200G/lane, ELS, OCS</td><td>Customer, yield, pricing, mix</td></tr>
+                <tr class="company-row" data-ticker="MTSI"><td><strong>MTSI</strong><br />MACOM</td><td>Components</td><td>None</td><td>Direct — drivers and TIAs</td><td>Mixed</td><td>Merchant semiconductor content</td><td>Low recurring</td><td>Design-win concentration</td><td>Moderate/high internal processes</td><td>1.6T/3.2T lane transition</td><td>Design loss; insourcing</td></tr>
+                <tr class="company-row" data-ticker="GLW"><td><strong>GLW</strong><br />Corning</td><td>Fiber + cable plant</td><td>None</td><td>Direct — physical path</td><td>Mixed</td><td>Materials + connectivity systems</td><td>Project/solution pull-through</td><td>Large partnership sensitivity</td><td>High capacity expansion</td><td>Fiber density, MCF, CPO</td><td>Ramp timing and utilization</td></tr>
+                <tr class="company-row" data-ticker="ANET"><td><strong>ANET</strong><br />Arista</td><td>Networking</td><td>None</td><td>Direct — controls fabric</td><td>Concentrated</td><td>Systems + differentiated software</td><td>Growing software/service</td><td>Very high: two customers</td><td>Fabless; working-capital heavy</td><td>102.4T, 1.6T, Ethernet AI</td><td>Customer/merchant-silicon dependence</td></tr>
+                <tr class="company-row" data-ticker="CSCO"><td><strong>CSCO</strong><br />Cisco</td><td>Networking</td><td>Transport</td><td>Direct — systems + optics</td><td>Mixed</td><td>Silicon, systems, optics, software</td><td>Large subscription/service base</td><td>Broad customer diversification</td><td>Fabless; broad R&amp;D</td><td>G300, 1.6T/LPO, Acacia</td><td>Competition; optics dilution</td></tr>
+                <tr class="company-row" data-ticker="CIEN"><td><strong>CIEN</strong><br />Ciena</td><td>Transport</td><td>None</td><td>Direct — coherent path</td><td>Concentrated</td><td>DSP-led transport systems</td><td>Software + Global Services</td><td>High cloud/carrier sensitivity</td><td>R&amp;D heavy; outsourced mix</td><td>Scale-across, WL6, 800G/1.6T</td><td>Project timing; capex cycles</td></tr>
+                <tr class="company-row" data-ticker="NOK"><td><strong>NOK</strong><br />Nokia</td><td>Transport</td><td>None</td><td>Direct — optical systems</td><td>Mixed</td><td>Systems + IP + services</td><td>Service/software/licensing</td><td>Large carrier exposure</td><td>High R&amp;D; broad portfolio</td><td>PSE/ICE integration; DCI</td><td>Integration; telecom cycle</td></tr>
+                <tr class="company-row" data-ticker="KEYS"><td><strong>KEYS</strong><br />Keysight</td><td>Test</td><td>None</td><td>Enabling — validates physics</td><td>Diversified</td><td>High-value instruments/software</td><td>Software, support, calibration</td><td>Diverse end markets</td><td>R&amp;D heavy; lower volume</td><td>224G/1.6T/CPO complexity</td><td>Reusable tools; lumpy budgets</td></tr>
+                <tr class="company-row" data-ticker="VIAV"><td><strong>VIAV</strong><br />VIAVI</td><td>Test</td><td>None</td><td>Enabling — validates fabric</td><td>Mixed</td><td>Instruments + software/assurance</td><td>Material service/assurance</td><td>Carrier/cloud budget sensitivity</td><td>Moderate; acquisition-led</td><td>1.6T + AI workload emulation</td><td>Integration; test-cycle timing</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="investor-synthesis" aria-labelledby="synthesis-title">
+        <div class="page-shell">
+          <div class="section-heading">
+            <div><p class="kicker">06 · Investor synthesis</p><h2 id="synthesis-title">The same AI build creates different earnings shapes</h2></div>
+            <p>This is analytical mapping, not a valuation model, price target, or personalized recommendation.</p>
+          </div>
+          <div class="synthesis-grid">
+            <article class="synthesis-card" data-synthesis-topic="directness"><h3>Directness</h3><p data-claim-type="reported"><span class="claim-label">Reported</span>COHR, LITE, MTSI, GLW, ANET, CSCO, CIEN, and NOK ship into the deployed path. AMAT, KEYS, and VIAV enable it.</p><p data-claim-type="analysis"><span class="claim-label analysis">Analysis</span>Directness improves unit-volume sensitivity, not automatically P&amp;L quality. A direct component vendor can carry more yield, pricing, and customer risk than an enabling tool vendor.</p></article>
+            <article class="synthesis-card" data-synthesis-topic="cyclicality"><h3>Cyclicality</h3><p data-claim-type="reported"><span class="claim-label">Reported</span>Systems and transport vendors cite large cloud/carrier customers; component vendors are building capacity; test vendors respond earlier in design and qualification.</p><p data-claim-type="analysis"><span class="claim-label analysis">Analysis</span>The cycle propagates in sequence: lab/tool orders → component capacity → module ramp → switches/cable plant → coherent build. Inventory corrections can reverse that sequence unevenly.</p></article>
+            <article class="synthesis-card" data-synthesis-topic="margin-location"><h3>Where margin can live</h3><p data-claim-type="reported"><span class="claim-label">Reported</span>ANET and CSCO combine hardware with software/services; CIEN/NOK add software and support; KEYS/VIAV sell specialized instruments and workflow software.</p><p data-claim-type="analysis"><span class="claim-label analysis">Analysis</span>Durable economics tend to sit where IP, qualification, operations, and switching/transport control are hardest to substitute. Module assembly alone is more exposed to price compression unless paired with scarce lasers, DSP, packaging, or scale.</p></article>
+            <article class="synthesis-card" data-synthesis-topic="major-risks"><h3>Major risks</h3><p data-claim-type="reported"><span class="claim-label">Reported</span>Customer concentration is explicit at AMAT, COHR/LITE, ANET, and CIEN; Nokia and HPE are integrating acquired network portfolios; several 2026 roadmaps still target later availability.</p><p data-claim-type="analysis"><span class="claim-label analysis">Analysis</span>The common failure modes are architecture substitution, delayed 1.6T/CPO ramps, yield/capacity imbalance, hyperscaler insourcing, merchant-silicon dependence, and confusing announced products with revenue-producing deployments.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="sources" aria-labelledby="sources-title">
+        <div class="page-shell">
+          <div class="section-heading">
+            <div><p class="kicker">07 · Sources + method</p><h2 id="sources-title">A cutoff that had to be earned</h2></div>
+            <p>Primary sources were fetched live on 2026-08-16. Source availability after delivery does not affect the standalone page.</p>
+          </div>
+          <div class="source-method">
+            <article class="method-note"><h3>Fail closed</h3><p>Every product and market claim was checked against an official product page, newsroom, investor document, or regulatory filing. If a source could not be resolved to the intended content, the claim was removed or would be labeled <strong>Unverified</strong>. Management roadmaps are labeled as roadmap or guidance, not completed shipment.</p></article>
+            <article class="source-status"><h3>Runtime independence</h3><p>This file has inline CSS, SVG, data, and JavaScript. It uses no live API, remote font, external image, stylesheet, library, XHR, persistent network socket, or automatic market-price feed. Optional source links are the only network-dependent feature.</p></article>
+          </div>
+          <ul class="source-list">
+            <li><strong>AMAT · Advanced packaging</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://www.appliedmaterials.com/eu/en/product-library/kinex-integrated-die-to-wafer-hybrid-bonding-system.html">Applied Materials — Kinex hybrid bonding</a><span>Official product page · verified 2026-08-16</span></li>
+            <li><strong>COHR · Datacom + CPO</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://www.coherent.com/news/press-releases/coherent-co-packaged-optics-cpo-technologies-ofc-2026">Coherent — CPO technologies at OFC 2026</a><span>Official newsroom · 2026-03-17 · verified 2026-08-16</span></li>
+            <li><strong>LITE · Lasers + modules</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://investor.lumentum.com/financial-news-releases/news-details/2026/Lumentum-Demonstrates-Industry-Leading-Technologies-and-Products-for-Scale-Out-Scale-Up-and-Scale-Across-AI-Infrastructure-at-OFC-2026/default.aspx">Lumentum — OFC 2026 product demonstrations</a><span>Official investor newsroom · 2026-03-17 · verified 2026-08-16</span></li>
+            <li><strong>MTSI · Analog optical ICs</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://www.macom.com/updates/news/2026/macom-announces-two-new-448g-per-lane-drivers-for-3-2t-data-cent">MACOM — 448G/lane modulator drivers</a><span>Official newsroom · 2026-03-17 · verified 2026-08-16</span></li>
+            <li><strong>GLW · Fiber + connectivity</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://www.corning.com/optical-communications/worldwide/en/home/solutions/glassworks-ai.html">Corning — GlassWorks AI</a><span>Official solution page · verified 2026-08-16</span></li>
+            <li><strong>ANET · AI Ethernet</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Introduces-Next-Generation-1-6Terabit-Portfolio-for-AI-Fabrics/default.aspx">Arista — 1.6T AI fabric portfolio</a><span>Official investor newsroom · 2026 · verified 2026-08-16</span></li>
+            <li><strong>CSCO · Silicon, systems + optics</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://newsroom.cisco.com/c/r/newsroom/en/us/a/y2026/m02/cisco-announces-new-silicon-one-g300.html">Cisco — Silicon One G300</a><span>Official newsroom · 2026-02-10 · verified 2026-08-16</span></li>
+            <li><strong>CIEN · Coherent transport</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://www.ciena.com/products/wavelogic/wavelogic-family">Ciena — WaveLogic family</a><span>Official product page · verified 2026-08-16</span></li>
+            <li><strong>NOK · PSE + ICE</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://www.nokia.com/optical-networks/pse-6s/">Nokia — PSE-6s</a><span>Official product page · verified 2026-08-16</span></li>
+            <li><strong>KEYS · 1.6T conformance</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://www.keysight.com/us/en/use-cases/optimize-1-6t-optical-transceiver-manufacturing-tests.html">Keysight — 1.6T manufacturing test</a><span>Official use-case page · verified 2026-08-16</span></li>
+            <li><strong>VIAV · AI fabric test</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://investor.viavisolutions.com/news-events/news-releases/news-details/2026/VIAVI-Launches-TestCenter-D2-1-6T-Appliance-to-Accelerate-AI-Infrastructure-Rollouts-Across-Hyperscale-and-Cloud-Data-Center-Environments/default.aspx">VIAVI — TestCenter D2 1.6T</a><span>Official investor newsroom · 2026-03-12 · verified 2026-08-16</span></li>
+            <li><strong>Nokia/Infinera status</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://www.nokia.com/newsroom/nokia-completes-acquisition-of-infinera-to-create-innovation-powerhouse-in-optical-networks-with-the-scale-to-power-the-data-center-revolution/">Nokia — acquisition completion</a><span>Official newsroom · 2025-02-28 · verified 2026-08-16</span></li>
+            <li><strong>HPE/Juniper status</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="reported" href="https://www.hpe.com/us/en/newsroom/press-release/2025/07/hewlett-packard-enterprise-closes-acquisition-of-juniper-networks-to-offer-industry-leading-comprehensive-cloud-native-ai-driven-portfolio.html">HPE — acquisition completion</a><span>Official newsroom · 2025-07-02 · verified 2026-08-16</span></li>
+            <li><strong>Nokia roadmap timing</strong><a class="source-link" data-verified-at="2026-08-16" data-claim-type="guidance" href="https://www.nokia.com/newsroom/nokia-launches-suite-of-applicationoptimized-optical-solutions-for-ai-era-networks/">Nokia — application-optimized coherent roadmap</a><span>Official newsroom · management roadmap · 2026-03-16 · verified 2026-08-16</span></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="page-shell">Research explainer only. No live prices, valuation targets, portfolio sizing, or personalized investment advice.</div>
+    </footer>
+
+    <script>
+      (() => {
+        "use strict";
+
+        const nodes = [...document.querySelectorAll("button.company-node[data-ticker]")];
+        const layerControls = [...document.querySelectorAll("[data-layer-control]")];
+        const overview = document.querySelector("#company-overview");
+        const detail = document.querySelector("#company-detail");
+        const knownTickers = new Set(nodes.map((node) => node.dataset.ticker));
+        const knownLayers = new Set(layerControls.map((control) => control.dataset.layerControl));
+        const state = {
+          activeTicker: null,
+          previewTicker: null,
+          activeLayer: "all",
+        };
+
+        function profileFacts(profile) {
+          return new Map(
+            [...profile.querySelectorAll(".profile-facts > div")].map((fact) => [
+              fact.querySelector("dt").textContent.trim(),
+              fact.querySelector("dd").textContent.trim(),
+            ]),
+          );
+        }
+
+        function reportedProductText(profile) {
+          const statement = profile.querySelector('[data-claim-type="reported"]');
+          if (!statement) return "Unavailable in the verified profile.";
+          const copy = statement.cloneNode(true);
+          copy.querySelectorAll(".claim-label").forEach((label) => label.remove());
+          return copy.textContent.trim();
+        }
+
+        function companyFromProfile(ticker) {
+          const profile = document.querySelector(`#profile-${ticker}`);
+          if (!profile) return null;
+          const facts = profileFacts(profile);
+          return {
+            company: `${profile.querySelector("h3").textContent.trim()} · ${ticker}`,
+            role: profile.querySelector(".role-line").textContent.trim(),
+            products: reportedProductText(profile),
+            path: facts.get("Photon position") || "Unavailable in the verified profile.",
+            customers: facts.get("Buyer") || "Unavailable in the verified profile.",
+            competitors: facts.get("Peers") || "Unavailable in the verified profile.",
+            catalyst: facts.get("AI catalyst") || "Unavailable in the verified profile.",
+            moatRisk: `${facts.get("Moat") || "Moat unavailable."} Principal risk: ${
+              facts.get("Main risk") || "unavailable."
+            }`,
+            exposure: profile.dataset.exposure,
+            concentration: profile.dataset.concentration,
+          };
+        }
+
+        function titleCase(value) {
+          return value ? value.charAt(0).toUpperCase() + value.slice(1) : "Unavailable";
+        }
+
+        function setDetailField(field, value) {
+          detail.querySelector(`[data-detail-field="${field}"]`).textContent = value;
+        }
+
+        function renderSelection() {
+          const shownTicker = state.previewTicker || state.activeTicker;
+          detail.dataset.activeTicker = state.activeTicker || "";
+          detail.dataset.previewTicker = state.previewTicker || "";
+
+          nodes.forEach((node) => {
+            const isSelected = node.dataset.ticker === state.activeTicker;
+            node.setAttribute("aria-pressed", String(isSelected));
+            node.classList.toggle("is-selected", isSelected);
+          });
+
+          document.querySelectorAll(".signal-line[data-connects]").forEach((line) => {
+            line.classList.toggle("is-active", line.dataset.connects === shownTicker);
+          });
+
+          if (!shownTicker) {
+            detail.hidden = true;
+            overview.hidden = false;
+            return;
+          }
+
+          const company = companyFromProfile(shownTicker);
+          if (!company) {
+            state.activeTicker = null;
+            state.previewTicker = null;
+            detail.hidden = true;
+            overview.hidden = false;
+            return;
+          }
+
+          setDetailField("company", company.company);
+          setDetailField("role", company.role);
+          setDetailField("products", company.products);
+          setDetailField("path", company.path);
+          setDetailField("customers", company.customers);
+          setDetailField("competitors", company.competitors);
+          setDetailField("catalyst", company.catalyst);
+          setDetailField("moat-risk", company.moatRisk);
+          setDetailField("exposure", titleCase(company.exposure));
+          setDetailField("concentration", titleCase(company.concentration));
+          overview.hidden = true;
+          detail.hidden = false;
+        }
+
+        function selectCompany(ticker) {
+          state.activeTicker = knownTickers.has(ticker) ? ticker : null;
+          state.previewTicker = null;
+          renderSelection();
+        }
+
+        function renderLayerState() {
+          nodes.forEach((node) => {
+            const memberships = new Set(node.dataset.layers.split(/\s+/));
+            node.classList.toggle(
+              "is-dimmed",
+              state.activeLayer !== "all" && !memberships.has(state.activeLayer),
+            );
+          });
+          layerControls.forEach((control) => {
+            control.setAttribute(
+              "aria-pressed",
+              String(control.dataset.layerControl === state.activeLayer),
+            );
+          });
+        }
+
+        function setLayer(layer) {
+          state.activeLayer = knownLayers.has(layer) ? layer : "all";
+          renderLayerState();
+        }
+
+        nodes.forEach((node) => {
+          const ticker = node.dataset.ticker;
+          node.addEventListener("click", () => selectCompany(ticker));
+          node.addEventListener("mouseenter", () => {
+            state.previewTicker = ticker;
+            renderSelection();
+          });
+          node.addEventListener("mouseleave", () => {
+            state.previewTicker = document.activeElement === node ? ticker : null;
+            renderSelection();
+          });
+          node.addEventListener("focus", () => {
+            state.previewTicker = ticker;
+            renderSelection();
+          });
+          node.addEventListener("blur", () => {
+            state.previewTicker = node.matches(":hover") ? ticker : null;
+            renderSelection();
+          });
+        });
+
+        layerControls.forEach((control) => {
+          control.addEventListener("click", () => {
+            setLayer(control.dataset.layerControl);
+            if (control.dataset.layerControl === "all") selectCompany(null);
+          });
+        });
+
+        renderLayerState();
+        renderSelection();
+      })();
+    </script>
+  </body>
+</html>
