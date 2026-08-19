@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Index of research reports and interactive maps published in this repository." />
+    <title>Research Index</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #06101c;
+        --bg-elevated: #0b1727;
+        --surface: #101f32;
+        --surface-strong: #172a40;
+        --text: #f2f6fb;
+        --muted: #b9c6d6;
+        --subtle: #91a3b8;
+        --line: #3e536b;
+        --line-strong: #68809a;
+        --cyan: #67dbff;
+        --cyan-soft: #153d52;
+        --green: #90e7aa;
+        --violet: #c5b1ff;
+        --amber: #ffd078;
+        --focus-ring: #ffd078;
+        --radius: 14px;
+        --shadow: 0 18px 60px rgba(0, 0, 0, 0.24);
+        --max: 1240px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 20% 0%, rgba(29, 93, 125, 0.24), transparent 34rem),
+          radial-gradient(circle at 90% 18%, rgba(72, 48, 122, 0.22), transparent 28rem),
+          var(--bg);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        font-size: 16px;
+        line-height: 1.62;
+      }
+
+      .page-shell {
+        width: min(100% - 2.5rem, var(--max));
+        margin-inline: auto;
+      }
+
+      a {
+        color: var(--cyan);
+        text-underline-offset: 0.2em;
+      }
+
+      a:hover {
+        color: #a8ebff;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--focus-ring);
+        outline-offset: 3px;
+      }
+
+      /* ---------- hero ---------- */
+
+      .hero {
+        padding: clamp(3.5rem, 9vw, 6.5rem) 0 clamp(2rem, 4vw, 3rem);
+      }
+
+      .eyebrow {
+        margin: 0 0 1rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--cyan);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.4rem, 6vw, 4rem);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        font-weight: 700;
+      }
+
+      h1 span {
+        color: var(--subtle);
+      }
+
+      .hero-deck {
+        margin: 1.4rem 0 0;
+        max-width: 56ch;
+        font-size: clamp(1rem, 1.6vw, 1.15rem);
+        color: var(--muted);
+      }
+
+      .hero-rule {
+        margin-top: 2.5rem;
+        border: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      /* ---------- report list ---------- */
+
+      main {
+        padding-bottom: clamp(4rem, 10vw, 7rem);
+      }
+
+      .section-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin: 2.25rem 0 1.5rem;
+      }
+
+      .kicker {
+        margin: 0;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--subtle);
+      }
+
+      .count {
+        font-variant-numeric: tabular-nums;
+        color: var(--subtle);
+        font-size: 0.9rem;
+      }
+
+      .report-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 1.25rem;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
+      }
+
+      .report-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        padding: 1.6rem 1.6rem 1.5rem;
+        background: linear-gradient(180deg, var(--surface-strong), var(--surface));
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        transition:
+          transform 160ms ease,
+          border-color 160ms ease;
+      }
+
+      .report-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--line-strong);
+      }
+
+      .report-card:focus-within {
+        border-color: var(--cyan);
+      }
+
+      .report-title {
+        margin: 0;
+        font-size: 1.3rem;
+        line-height: 1.28;
+        letter-spacing: -0.015em;
+      }
+
+      /* whole card is the click target */
+      .report-title a::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+      }
+
+      .report-title a {
+        color: var(--text);
+        text-decoration: none;
+      }
+
+      .report-card:hover .report-title a {
+        color: var(--cyan);
+      }
+
+      .report-blurb {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.97rem;
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: auto;
+        padding-top: 0.35rem;
+      }
+
+      .tag {
+        font-size: 0.74rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--cyan);
+        background: var(--cyan-soft);
+        border: 1px solid rgba(103, 219, 255, 0.28);
+        border-radius: 999px;
+        padding: 0.25rem 0.7rem;
+      }
+
+      .filename {
+        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+        font-size: 0.78rem;
+        color: var(--subtle);
+        letter-spacing: 0;
+        text-transform: none;
+        background: rgba(255, 255, 255, 0.04);
+        border-color: var(--line);
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 1.75rem 0 3rem;
+        color: var(--subtle);
+        font-size: 0.88rem;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .report-card {
+          transition: none;
+        }
+        .report-card:hover {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="page-shell">
+        <p class="eyebrow">Research · published reports</p>
+        <h1>Research index.<br /><span>Everything published here.</span></h1>
+        <p class="hero-deck">
+          Standalone, self-contained reports and interactive maps. Each page below opens on its
+          own — no build step, no dependencies.
+        </p>
+        <hr class="hero-rule" />
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <div class="section-head">
+        <p class="kicker">Available pages</p>
+        <p class="count">1 report</p>
+      </div>
+
+      <!-- To add a report: copy one <li class="report-card"> block and update the
+           link, title, blurb, and tags. -->
+      <ul class="report-list">
+        <li class="report-card">
+          <h2 class="report-title">
+            <a href="ai-optics-ecosystem-map.html"
+              >AI Optics Ecosystem — Follow the Photon, Follow the Revenue</a
+            >
+          </h2>
+          <p class="report-blurb">
+            A live-verified map of the companies, products, and economics across the
+            AI-datacenter optical path — from photonics tooling through modules, fiber,
+            switching, and test.
+          </p>
+          <div class="tags">
+            <span class="tag">Investor map</span>
+            <span class="tag">Current through 2026-08-16</span>
+            <span class="tag filename">ai-optics-ecosystem-map.html</span>
+          </div>
+        </li>
+      </ul>
+    </main>
+
+    <footer>
+      <div class="page-shell">Static pages served from <code>docs/</code>.</div>
+    </footer>
+  </body>
+</html>
